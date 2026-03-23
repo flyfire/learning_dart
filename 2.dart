@@ -6,10 +6,11 @@ class Meta {
 }
 
 class Item extends Meta {
-  Item(name, price): super(name, price);
+  int count;
+  Item(name, price, this.count): super(name, price);
 
   Item operator +(Item item) {
-    return Item(name + item.name, price + item.price);
+    return Item(name + item.name, price*count + item.price*item.count, count + item.count);
   }
 }
 
@@ -31,6 +32,8 @@ class ShoppingCart extends Meta with PrintHelper {
     return """
 购物车信息:
 -----------------------------
+名称 单价 个数 总价
+${bookings.map((item) => "${item.name} ${item.price} ${item.count}, ${item.price*item.count}").join("\n")}
   用户名: $name
   优惠码: ${code??"没有"}
   总价: $price
@@ -42,10 +45,10 @@ class ShoppingCart extends Meta with PrintHelper {
 
 void main() {
   ShoppingCart.withCode(name: "张三", code: "123456")
-  ..bookings = [Item("苹果", 10.0), Item("梨", 20.0)]
+  ..bookings = [Item("苹果", 10.0, 2), Item("梨", 20.0, 3)]
   ..printInfo();
 
   ShoppingCart(name: "李四")
-  ..bookings = [Item("香蕉", 15.0), Item("西瓜", 40.0)]
+  ..bookings = [Item("香蕉", 15.0, 5), Item("西瓜", 40.0, 1)]
   ..printInfo();
 }
